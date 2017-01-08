@@ -105,6 +105,6 @@ defmodule TaskExercise do
   def supervised_tasks(list, fun) when is_list(list) do
     Task.Supervisor.async_stream(TaskExercise.DoJob, list, (fn job -> fun.(job) end))
     |> Enum.to_list
-    |> Enum.map(fn({k, v}) -> v end)
+    |> Enum.map(fn({_k, v}) -> v end)
   end
 end
