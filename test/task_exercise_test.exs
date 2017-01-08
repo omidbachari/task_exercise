@@ -1,8 +1,10 @@
 defmodule TaskExerciseTest do
   use ExUnit.Case
-  doctest TaskExercise
 
-  test "the truth" do
-    assert 1 + 1 == 2
+  describe "simple_task" do
+    test "returns :ok and pid" do
+      exp = fn () -> 1 + 2 end
+      assert {:ok, _pid} = TaskExercise.simple_task(exp)
+    end
   end
 end
