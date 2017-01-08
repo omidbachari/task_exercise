@@ -51,8 +51,8 @@ defmodule TaskExercise do
 
   """
   @spec awaited_tasks(list, (... -> any)) :: list
-  def awaited_tasks(list, fun) when is_list(list) do
-    list
+  def awaited_tasks(jobs, fun) when is_list(jobs) do
+    jobs
     |> Task.async_stream(fun)
     |> Enum.to_list
     |> Enum.map(fn({_k, v}) -> v end)
@@ -102,8 +102,8 @@ defmodule TaskExercise do
 
   """
   @spec supervised_tasks(list, (... -> any)) :: list
-  def supervised_tasks(list, fun) when is_list(list) do
-    Task.Supervisor.async_stream(TaskExercise.DoJob, list, (fn job -> fun.(job) end))
+  def supervised_tasks(jobs, fun) when is_list(jobs) do
+    Task.Supervisor.async_stream(TaskExercise.DoJob, jobs, (fn job -> fun.(job) end))
     |> Enum.to_list
     |> Enum.map(fn({_k, v}) -> v end)
   end
