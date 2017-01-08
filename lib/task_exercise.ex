@@ -56,4 +56,34 @@ defmodule TaskExercise do
     |> Enum.map(fn(arg) -> Task.async(fn () -> fun.(arg) end) end)
     |> Enum.map(fn(job) -> Task.await(job) end)
   end
+
+  @doc """
+  This is a supervised and awaited task.
+  It takes a function, which contains the work
+  to be performed. It returns the result.
+
+  Example:
+
+      iex(1)> TaskExercise.supervised_task(fn () -> 1 + 2 end)
+      3
+
+  To verify that the supervisor starts
+  properly and to verify that the task
+  looks the way you might expect, try the
+  following:
+
+      iex(1)> :observer.start
+      :ok
+      iex(2)> exp = fn -> :timer.sleep(5_000) end
+      #Function<20.52032458/0 in :erl_eval.expr/5>
+      iex(3)> TaskExercise.supervised_task(exp)
+
+  The return value of the above isn't
+  important, but watching the `Applications`
+  tab in Observer will illustrate the
+  network of processes you've created.
+
+  """
+  @spec supervised_task((... -> any)) :: any
+  def supervised_task(fun), do: Task.Supervisor.async(TaskExercise.DoJob, fun) |> Task.await
 end
