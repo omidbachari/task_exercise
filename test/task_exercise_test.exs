@@ -14,4 +14,11 @@ defmodule TaskExerciseTest do
       assert 3 = TaskExercise.awaited_task(exp)
     end
   end
+
+  describe "awaited_tasks" do
+    test "returns awaited result list" do
+      exp = fn a -> a + 1 end
+      assert [2, 3, 4] = TaskExercise.awaited_tasks([1, 2, 3], exp)
+    end
+  end
 end
