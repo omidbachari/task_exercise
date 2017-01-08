@@ -7,7 +7,7 @@ defmodule TaskExercise do
   """
 
   @doc """
-  This is a simple task, which is
+  Wraps a simple task, which is
   performed asynchronously, without
   concern about the return. It takes
   a function, which contains the work
@@ -23,7 +23,7 @@ defmodule TaskExercise do
   def simple_task(fun), do: Task.start fun
 
   @doc """
-  This is an awaited task, which is
+  Wraps an awaited task, which is
   performed asynchronously and we do
   care about the return. It takes
   a function, which contains the work
@@ -59,7 +59,7 @@ defmodule TaskExercise do
   end
 
   @doc """
-  This is a supervised and awaited task.
+  This function wraps a supervised and awaited task.
   It takes a function, which contains the work
   to be performed. It returns the result.
 
@@ -89,7 +89,7 @@ defmodule TaskExercise do
   def supervised_task(fun), do: Task.Supervisor.async(TaskExercise.DoJob, fun) |> Task.await
 
   @doc """
-  This is a supervised and awaited collection
+  This function performs a supervised and awaited collection
   of tasks. It takes a list and a function.
   It returns the result.
 
