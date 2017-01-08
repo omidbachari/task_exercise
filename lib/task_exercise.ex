@@ -86,4 +86,24 @@ defmodule TaskExercise do
   """
   @spec supervised_task((... -> any)) :: any
   def supervised_task(fun), do: Task.Supervisor.async(TaskExercise.DoJob, fun) |> Task.await
+
+  @doc """
+  This is a supervised and awaited collection
+  of tasks. It takes a list and a function.
+  It returns the result.
+
+  Example:
+
+      iex(1)>  exp = fn a -> a + 2 end
+      #Function<6.52032458/1 in :erl_eval.expr/5>
+      iex(2)> TaskExercise.supervised_tasks([1, 2, 3, 4, 5], exp)
+      [3, 4, 5, 6, 7]
+
+  """
+  @spec supervised_tasks(list, (... -> any)) :: list
+  def supervised_tasks(list, fun) when is_list(list) do
+    Task.Supervisor.async_stream(TaskExercise.DoJob, list, (fn job -> fun.(job) end))
+    |> Enum.to_list
+    |> Enum.map(fn({k, v}) -> v end)
+  end
 end
