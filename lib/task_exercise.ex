@@ -21,4 +21,20 @@ defmodule TaskExercise do
   """
   @spec simple_task((... -> any)) :: {:ok, pid}
   def simple_task(fun), do: Task.start fun
+
+  @doc """
+  This is an awaited task, which is
+  performed asynchronously and we do
+  care about the return. It takes
+  a function, which contains the work
+  to be performed.
+
+  Example:
+
+      iex(1)> TaskExercise.awaited_task(fn () -> 1 + 2 end)
+      3
+
+  """
+  @spec awaited_task((... -> any)) :: any
+  def awaited_task(fun), do: Task.async(fun) |> Task.await
 end
