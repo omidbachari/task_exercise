@@ -53,8 +53,9 @@ defmodule TaskExercise do
   @spec awaited_tasks(list, (... -> any)) :: list
   def awaited_tasks(list, fun) when is_list(list) do
     list
-    |> Enum.map(fn(arg) -> Task.async(fn () -> fun.(arg) end) end)
-    |> Enum.map(fn(job) -> Task.await(job) end)
+    |> Task.async_stream(fun)
+    |> Enum.to_list
+    |> Enum.map(fn({_k, v}) -> v end)
   end
 
   @doc """
