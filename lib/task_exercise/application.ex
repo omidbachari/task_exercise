@@ -9,7 +9,7 @@ defmodule TaskExercise.Application do
     import Supervisor.Spec, warn: false
 
     children = [
-      supervisor(Task.Supervisor, [[name: TaskExercise.DoJob, restart: :transient]])
+      supervisor(Task.Supervisor, [[name: TaskExercise.SuperviseJob, restart: :transient]])
     ]
 
     opts = [strategy: :one_for_one, name: TaskExercise.Supervisor]

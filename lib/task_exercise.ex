@@ -86,7 +86,7 @@ defmodule TaskExercise do
 
   """
   @spec supervised_task((... -> any)) :: any
-  def supervised_task(fun), do: Task.Supervisor.async(TaskExercise.DoJob, fun) |> Task.await
+  def supervised_task(fun), do: TaskExercise.SuperviseJob |> Task.Supervisor.async(fun) |> Task.await
 
   @doc """
   This function performs a supervised and awaited collection
@@ -103,7 +103,8 @@ defmodule TaskExercise do
   """
   @spec supervised_tasks(list, (... -> any)) :: list
   def supervised_tasks(jobs, fun) when is_list(jobs) do
-    Task.Supervisor.async_stream(TaskExercise.DoJob, jobs, (fn job -> fun.(job) end))
+    TaskExercise.SuperviseJob
+    |> Task.Supervisor.async_stream(jobs, fun)
     |> Enum.to_list
     |> Enum.map(fn({_k, v}) -> v end)
   end
