@@ -42,4 +42,11 @@ defmodule TaskExerciseTest do
       assert 3 = TaskExercise.yielded_task(exp)
     end
   end
+
+  describe "yielded_tasks" do
+    test "returns yielded results" do
+      exp = fn a -> a + 1 end
+      assert [2, 3, 4] = TaskExercise.yielded_tasks([1, 2, 3], exp)
+    end
+  end
 end

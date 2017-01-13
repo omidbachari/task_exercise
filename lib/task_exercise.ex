@@ -116,4 +116,10 @@ defmodule TaskExercise do
     |> elem(1)
   end
 
+  def yielded_tasks(jobs, fun) do
+    jobs
+    |> Enum.map(&Task.async(fn -> fun.(&1) end))
+    |> Task.yield_many
+    |> Enum.map(fn({_, {_, v}}) -> v end)
+  end
 end
