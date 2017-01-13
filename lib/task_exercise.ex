@@ -108,4 +108,12 @@ defmodule TaskExercise do
     |> Enum.to_list
     |> Enum.map(fn({_k, v}) -> v end)
   end
+
+  def yielded_task(fun) do
+    fun
+    |> Task.async
+    |> Task.yield
+    |> elem(1)
+  end
+
 end
