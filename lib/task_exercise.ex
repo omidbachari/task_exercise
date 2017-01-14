@@ -46,12 +46,12 @@ defmodule TaskExercise do
   takes a list and a function.
 
   Example:
-      iex(1)> TaskExercise.awaited_tasks([1, 2, 3], (fn a -> a + 1 end))
+      iex(1)> TaskExercise.stream_tasks([1, 2, 3], (fn a -> a + 1 end))
       [2, 3, 4]
 
   """
-  @spec awaited_tasks(list, (... -> any)) :: list
-  def awaited_tasks(jobs, fun) when is_list(jobs) do
+  @spec stream_tasks(list, (... -> any)) :: list
+  def stream_tasks(jobs, fun) when is_list(jobs) do
     jobs
     |> Task.async_stream(fun)
     |> Enum.to_list
@@ -89,7 +89,7 @@ defmodule TaskExercise do
   def supervised_task(fun), do: TaskExercise.SuperviseJob |> Task.Supervisor.async(fun) |> Task.await
 
   @doc """
-  This function performs a supervised and awaited collection
+  This function performs a supervised collection
   of tasks. It takes a list and a function.
   It returns the result.
 

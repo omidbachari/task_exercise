@@ -15,10 +15,10 @@ defmodule TaskExerciseTest do
     end
   end
 
-  describe "awaited_tasks" do
+  describe "stream_tasks" do
     test "returns awaited result list" do
       exp = fn a -> a + 1 end
-      assert [2, 3, 4] = TaskExercise.awaited_tasks([1, 2, 3], exp)
+      assert [2, 3, 4] = TaskExercise.stream_tasks([1, 2, 3], exp)
     end
   end
 
