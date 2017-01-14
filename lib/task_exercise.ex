@@ -109,6 +109,20 @@ defmodule TaskExercise do
     |> Enum.map(fn({_k, v}) -> v end)
   end
 
+  @doc """
+  Wraps a yielded task, which is
+  performed asynchronously and we do
+  care about the return, within a timeout.
+  It takes a function, which contains the
+  work to be performed.
+
+  Example:
+
+      iex(1)> TaskExercise.yielded_task(fn () -> 1 + 2 end)
+      3
+
+  """
+  @spec yielded_task((... -> any)) :: any
   def yielded_task(fun) do
     fun
     |> Task.async
