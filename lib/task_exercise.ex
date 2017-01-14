@@ -46,12 +46,12 @@ defmodule TaskExercise do
   takes a list and a function.
 
   Example:
-      iex(1)> TaskExercise.awaited_tasks([1, 2, 3], (fn a -> a + 1 end))
+      iex(1)> TaskExercise.stream_tasks([1, 2, 3], (fn a -> a + 1 end))
       [2, 3, 4]
 
   """
-  @spec awaited_tasks(list, (... -> any)) :: list
-  def awaited_tasks(jobs, fun) when is_list(jobs) do
+  @spec stream_tasks(list, (... -> any)) :: list
+  def stream_tasks(jobs, fun) when is_list(jobs) do
     jobs
     |> Task.async_stream(fun)
     |> Enum.to_list
@@ -89,7 +89,7 @@ defmodule TaskExercise do
   def supervised_task(fun), do: TaskExercise.SuperviseJob |> Task.Supervisor.async(fun) |> Task.await
 
   @doc """
-  This function performs a supervised and awaited collection
+  This function performs a supervised collection
   of tasks. It takes a list and a function.
   It returns the result.
 
@@ -107,5 +107,48 @@ defmodule TaskExercise do
     |> Task.Supervisor.async_stream(jobs, fun)
     |> Enum.to_list
     |> Enum.map(fn({_k, v}) -> v end)
+  end
+
+  @doc """
+  Wraps a yielded task, which is
+  performed asynchronously and we do
+  care about the return, within a timeout.
+  It takes a function, which contains the
+  work to be performed.
+
+  Example:
+
+      iex(1)> TaskExercise.yielded_task(fn () -> 1 + 2 end)
+      3
+
+  """
+  @spec yielded_task((... -> any)) :: any
+  def yielded_task(fun) do
+    fun
+    |> Task.async
+    |> Task.yield
+    |> elem(1)
+  end
+
+
+  @doc """
+  This function performs a supervised collection
+  of tasks. It takes a list and a function.
+  It returns the result.
+
+  Example:
+
+      iex(1)>  exp = fn a -> a + 2 end
+      #Function<6.52032458/1 in :erl_eval.expr/5>
+      iex(2)> TaskExercise.yielded_tasks([1, 2, 3, 4, 5], exp)
+      [3, 4, 5, 6, 7]
+
+  """
+  @spec yielded_tasks(list, (... -> any)) :: list
+  def yielded_tasks(jobs, fun) do
+    jobs
+    |> Enum.map(&Task.async(fn -> fun.(&1) end))
+    |> Task.yield_many
+    |> Enum.map(fn({_, {_, v}}) -> v end)
   end
 end
