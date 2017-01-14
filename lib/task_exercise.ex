@@ -130,6 +130,21 @@ defmodule TaskExercise do
     |> elem(1)
   end
 
+
+  @doc """
+  This function performs a supervised collection
+  of tasks. It takes a list and a function.
+  It returns the result.
+
+  Example:
+
+      iex(1)>  exp = fn a -> a + 2 end
+      #Function<6.52032458/1 in :erl_eval.expr/5>
+      iex(2)> TaskExercise.yielded_tasks([1, 2, 3, 4, 5], exp)
+      [3, 4, 5, 6, 7]
+
+  """
+  @spec yielded_tasks(list, (... -> any)) :: list
   def yielded_tasks(jobs, fun) do
     jobs
     |> Enum.map(&Task.async(fn -> fun.(&1) end))
